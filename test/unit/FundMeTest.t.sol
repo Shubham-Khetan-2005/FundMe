@@ -35,19 +35,19 @@ contract FundMeTest is Test {
         fundMe.fund();
     }
 
-    function testFundUpdatesFundDataStructures() public funded{
+    function testFundUpdatesFundDataStructures() public funded {
         assertEq(fundMe.getFunderAmount(USER), SEND_VALUE);
         assertEq(fundMe.getFunders(0), USER);
     }
 
-    function testOnlyOwnerCanWithdraw() public funded{
+    function testOnlyOwnerCanWithdraw() public funded {
         vm.expectRevert();
         vm.prank(USER);
         fundMe.withdraw();
     }
 
     modifier funded() {
-        vm.prank(USER);     // The next txn will be sent by user -- to avoid confuison between msg.sender and address(this)
+        vm.prank(USER); // The next txn will be sent by user -- to avoid confuison between msg.sender and address(this)
         fundMe.fund{value: SEND_VALUE}();
         _;
     }
@@ -74,8 +74,8 @@ contract FundMeTest is Test {
         uint160 numberOfFunders = 10;
         uint160 startIndex = 1;
 
-        for(uint160 i = startIndex; i < numberOfFunders; i++) {
-            hoax(address(i), SEND_VALUE);     // hoax = vm.prank + vm.deal
+        for (uint160 i = startIndex; i < numberOfFunders; i++) {
+            hoax(address(i), SEND_VALUE); // hoax = vm.prank + vm.deal
             fundMe.fund{value: SEND_VALUE}();
         }
 
